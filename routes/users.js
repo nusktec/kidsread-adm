@@ -50,8 +50,10 @@ router.all('/reset', function (req, res, next) {
             .then((user) => {
                 if (user !== null) {
                     //password reset, send
-                    user.upass = util.util.getRandomChar(10);
-
+                    let _newPass = util.util.getRandomChar(10);
+                    user.update({upass: sha1(_newPass)});
+                    //send an email
+                    util.Jwr(res, true, _newPass, "Password reset !");
                 } else {
                     util.Jwr(res, false, {}, "Invalid user details !");
                 }
@@ -100,7 +102,7 @@ router.all('/update', function (req, res, next) {
 });
 
 /* get user. */
-router.all('/get', function (req, res, next) {
+router.all('get', function (req, res, next) {
     util.JSONChecker(res, req.body, (data) => {
         muser.findOne({where: {uid: data.uid}})
             .then((user) => {
@@ -112,7 +114,7 @@ router.all('/get', function (req, res, next) {
 });
 
 /* Remove user */
-router.all('/delete', function (req, res, next) {
+router.all('delete', function (req, res, next) {
     util.JSONChecker(res, req.body, (data) => {
         muser.destroy({where: {uid: data.uid}})
             .then((user) => {

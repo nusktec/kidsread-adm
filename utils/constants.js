@@ -1,6 +1,7 @@
 /**
  * Created by revelation on 18/05/2020.
  */
+// let fs = require("fs");
 // const MYSQL_CONN = {
 //     dbName: 'rs_kidsreadx',
 //     dbUser: 'root',
@@ -22,5 +23,12 @@ const MYSQL_CONN = {
 const LC_SSK = "a103650ce9d64de3bc4df68a3df53e418617fc39";
 //JWT
 const JSW_HASH = {exp: '2w', secrete: 'reedax.io'};
-
-module.exports = {MYSQL_CONN: MYSQL_CONN, SSK: LC_SSK, JSW: JSW_HASH};
+//Email Config
+const EMAIL_CONFIG = {
+    silent: true,
+    // dkim: {
+    //     privateKey: fs.readFileSync('./dkim-private.pem', 'utf8'),
+    //     keySelector: 'mydomainkey'
+    // }
+};
+module.exports = {MYSQL_CONN: MYSQL_CONN, SSK: LC_SSK, JSW: JSW_HASH, EMAIL_CONFIG};

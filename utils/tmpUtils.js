@@ -42,12 +42,6 @@ class tmpUtils {
         }
         return res;
     }
-
-    //generate token
-    static generateTicket() {
-        let d = new Date();
-        return "NCDMB-" + d.getUTCFullYear() + "" + d.getMonth() + "" + d.getDate() + "-" + tmpUtils.getRandomChar(5).toUpperCase();
-    }
 }
 
 module.exports = tmpUtils;

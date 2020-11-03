@@ -12,6 +12,7 @@ let util = require('./utils/utils');
 
 let indexRouter = require('./routes/index');
 let usersRouter = require('./routes/users');
+let moduleRouter = require('./routes/module');
 
 let app = express();
 
@@ -41,6 +42,7 @@ app.use('/api/handshake', (req, res, next) => {
 });
 //
 app.use('/api/user', usersRouter);
+app.use('/api/module', moduleRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -4,7 +4,7 @@
 let tmpUtils = require('./tmpUtils');
 //json writer
 function Jwr(res, status, data, msg) {
-    res.jsonp({status: status, data: data, msg: msg});
+    res.status((status ? 200 : 401)).jsonp({status: status, data: data, msg: msg});
 }
 
 //check if body is empty
