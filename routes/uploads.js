@@ -86,7 +86,7 @@ router.all('/delete', function (req, res, next) {
         let d = req.body;
         if (d) {
             //fs.unlinkSync("assets/" + d.path);
-            await fs.unlinkSync("public/assets/images/" + d.path);
+            await fs.unlinkSync("public/assets/" + d.path);
         }
         util.Jwr(res, true, {url: null}, "Deleted !");
     })().catch(err => {
