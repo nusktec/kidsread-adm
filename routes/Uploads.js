@@ -5,6 +5,7 @@
  */
 let express = require('express');
 let router = express.Router();
+let fs = require('fs');
 let sha1 = require('sha1');
 let md5 = require('md5');
 const moveFile = require('move-file');
@@ -74,6 +75,20 @@ router.all('/video', function (req, res, next) {
         let filename = "assets/videos/" + req.files.video.md5 + ".pdf";
         await moveFile(req.files.video.tempFilePath, 'public/' + filename);
         util.Jwr(res, true, {url: req.get('host') + "/" + filename}, "Uploaded !");
+    })().catch(err => {
+        util.Jwr(res, false, {url: null}, "Uploading Unsuccessful 0400");
+    });
+});
+
+router.all('/delete', function (req, res, next) {
+    //check if body is empty
+    (async () => {
+        let d = req.body;
+        if (d) {
+            //fs.unlinkSync("assets/" + d.path);
+            await fs.unlinkSync("public/assets/images/" + d.path);
+        }
+        util.Jwr(res, true, {url: null}, "Deleted !");
     })().catch(err => {
         util.Jwr(res, false, {url: null}, "Uploading Unsuccessful 0400");
     });
