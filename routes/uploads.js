@@ -90,7 +90,7 @@ router.all('/delete', function (req, res, next) {
         }
         util.Jwr(res, true, {url: null}, "Deleted !");
     })().catch(err => {
-        util.Jwr(res, false, {url: null}, "Uploading Unsuccessful 0400");
+        util.Jwr(res, false, {url: null, error: err}, "Unable to delete 0400");
     });
 });
 
