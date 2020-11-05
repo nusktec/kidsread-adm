@@ -36,7 +36,7 @@ router.all('/image', function (req, res, next) {
         await moveFile(req.files.image.tempFilePath, 'public/' + filename);
         util.Jwr(res, true, {url: req.get('host') + "/" + filename}, "Uploaded !");
     })().catch(err => {
-        util.Jwr(res, false, {url: null}, "Uploading Unsuccessful 0400");
+        util.Jwr(res, false, {url: null, err: err}, "Uploading Unsuccessful 0400");
     });
 });
 
