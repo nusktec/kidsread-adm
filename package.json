@@ -19,6 +19,8 @@
     "mysql2": "^2.1.0",
     "sendmail": "^1.6.1",
     "sequelize": "^5.21.9",
+    "move-file": "^2.0.0",
+    "express-fileupload": "^1.1.7-alpha.3",
     "sha1": "^1.1.1"
   }
 }
