@@ -9,6 +9,7 @@ let util = require('../utils/utils');
 let muser = require('./../models/musers');
 let mnotifications = require('./../models/mnotifications');
 
+
 /* login user. */
 router.all('/login', function (req, res, next) {
     //check if body is empty
@@ -24,7 +25,9 @@ router.all('/login', function (req, res, next) {
                 } else {
                     util.Jwr(res, false, {}, "Invalid user details !");
                 }
-            })
+            }).catch(err => {
+            util.Jwr(res, false, {}, "Fatal error, check data keys and length");
+        })
     }, false);
 });
 
@@ -39,7 +42,9 @@ router.all('/notifications', function (req, res, next) {
                 } else {
                     util.Jwr(res, false, {}, "Unable to load notifications !");
                 }
-            })
+            }).catch(err => {
+            util.Jwr(res, false, {}, "Fatal error, check data keys and length");
+        })
     }, false);
 });
 /* login user. */
@@ -57,7 +62,9 @@ router.all('/reset', function (req, res, next) {
                 } else {
                     util.Jwr(res, false, {}, "Invalid user details !");
                 }
-            })
+            }).catch(err => {
+            util.Jwr(res, false, {}, "Fatal error, check data keys and length");
+        })
     }, false);
 });
 
@@ -75,10 +82,14 @@ router.all('/create', function (req, res, next) {
                 }
             }).catch(err => {
             util.Jwr(res, false, [], "Error creating users");
+        }).catch(err => {
+            util.Jwr(res, false, {}, "Fatal error, check data keys and length");
         })
     }, false)
 });
 
+//restrict
+router.all('*', auth.Jverify);
 /* user user. */
 router.all('/update', function (req, res, next) {
     util.JSONChecker(res, req.body, (data) => {
@@ -95,18 +106,6 @@ router.all('/update', function (req, res, next) {
                 } else {
                     util.Jwr(res, false, user, "Unable to update non-existing user");
                 }
-            }).catch(err => {
-            util.Jwr(res, false, [], "Error updating users");
-        })
-    }, false)
-});
-
-/* get user. */
-router.all('get', function (req, res, next) {
-    util.JSONChecker(res, req.body, (data) => {
-        muser.findOne({where: {uid: data.uid}})
-            .then((user) => {
-                util.Jwr(res, true, user, "User loaded !");
             }).catch(err => {
             util.Jwr(res, false, [], "Error updating users");
         })
@@ -145,4 +144,21 @@ router.all('/list', function (req, res, next) {
     }, true)
 });
 
+/* get user. */
+router.all('/get-login', function (req, res, next) {
+    util.Jwr(res, true, res.locals.juser, "User loaded !");
+});
+
+router.all('/get', function (req, res, next) {
+    util.JSONChecker(res, req.body, (data) => {
+        muser.findOne({where: {uid: data.uid}})
+            .then((user) => {
+                util.Jwr(res, true, user, "User loaded !");
+            }).catch(err => {
+            util.Jwr(res, false, [], "Error loading users");
+        }).catch(err => {
+            util.Jwr(res, false, [], "Error loading users");
+        })
+    }, false)
+});
 module.exports = router;

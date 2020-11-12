@@ -11,7 +11,9 @@ Mactivity.init({
     atitle: {type: eng.DataTypes.STRING, allowNull: false},
     adescription: {type: eng.DataTypes.STRING, allowNull: false},
     atype: {type: eng.DataTypes.INTEGER, allowNull: false, defaultValue: 1},
-    aurl: {type: eng.DataTypes.TEXT, allowNull: false},
+    agurl: {type: eng.DataTypes.TEXT, allowNull: true},
+    avurl: {type: eng.DataTypes.TEXT, allowNull: true},
+    apurl: {type: eng.DataTypes.TEXT, allowNull: true},
     abanner: {type: eng.DataTypes.TEXT, allowNull: false},
 }, {sequelize: conn, modelName: 'rs_activities'});
 conn.sync();

@@ -20,13 +20,16 @@ router.all('/list', function (req, res, next) {
                 if (module !== null) {
                     util.Jwr(res, true, module, "successful !");
                 } else {
-                    util.Jwr(res, false, {}, "Invalid user details !");
+                    util.Jwr(res, false, {}, "Invalid module details !");
                 }
             }).catch(err => {
             util.Jwr(res, false, {}, "Something bas has happened, try again !");
         })
     }, true);
 });
+
+//restrict
+router.all('*', auth.Jverify);
 
 /* list module purchases. */
 router.all('/buy/list', function (req, res, next) {
@@ -69,6 +72,29 @@ router.all('/buy/add', function (req, res, next) {
     }, false)
 });
 
+
+/* list module. */
+router.all('/get', function (req, res, next) {
+    //check if body is empty
+    util.JSONChecker(res, req.body, (data) => {
+        modules.findOne({
+            where: {mid: data.mid},
+            order: [['mid', 'DESC']],
+            include: [{model: activities, as: 'activities'}]
+        })
+            .then((module) => {
+                if (module !== null) {
+                    util.Jwr(res, true, module, "successful !");
+                } else {
+                    util.Jwr(res, false, {}, "Invalid module details !");
+                }
+            }).catch(err => {
+            util.Jwr(res, false, {}, "Something bas has happened, try again !");
+        })
+    }, true);
+});
+
+
 /* create. */
 router.all('/create', function (req, res, next) {
     util.JSONChecker(res, req.body, (data) => {
@@ -79,6 +105,65 @@ router.all('/create', function (req, res, next) {
                 } else {
                     util.Jwr(res, false, module, "Title already exist");
                 }
+            }).catch(err => {
+            util.Jwr(res, false, [], "Error creating module");
+        })
+    }, false)
+});
+
+/*Update module*/
+router.all('/module/update', function (req, res, next) {
+    util.JSONChecker(res, req.body, (data) => {
+        modules.findOne({where: {mid: data.mid}})
+            .then((module) => {
+                if (module) {
+                    //apply new updates
+                    delete data.utoken;
+                    module.update(data);
+                    util.Jwr(res, true, module, "Module records updated !");
+                } else {
+                    util.Jwr(res, false, module, "Unable to update non-existing module");
+                }
+            }).catch(err => {
+            util.Jwr(res, false, [], "Error updating module");
+        })
+    }, false)
+});
+
+/* remove modules. */
+router.all('/module/del', function (req, res, next) {
+    util.JSONChecker(res, req.body, (data) => {
+        modules.destroy({where: {mid: data.mid}})
+            .then((module) => {
+                if (module) {
+                    util.Jwr(res, true, module, "module deleted");
+                } else {
+                    util.Jwr(res, false, module, "module to delete done !");
+                }
+            }).catch(err => {
+            util.Jwr(res, false, [], "Error deleting module");
+        })
+    }, false)
+});
+
+/*Activity list all*/
+router.all('/activity/get-all', function (req, res, next) {
+    util.JSONChecker(res, req.body, (data) => {
+        activities.findAll()
+            .then((module) => {
+                util.Jwr(res, true, module, "Activity listed !");
+            }).catch(err => {
+            util.Jwr(res, false, [], "Error creating module");
+        })
+    }, false)
+});
+
+/*Activity get*/
+router.all('/activity/get', function (req, res, next) {
+    util.JSONChecker(res, req.body, (data) => {
+        activities.findOne({where: {aid: data.aid}})
+            .then((module) => {
+                util.Jwr(res, true, module ? module : [], "Activity listed !");
             }).catch(err => {
             util.Jwr(res, false, [], "Error creating module");
         })
@@ -113,19 +198,24 @@ router.all('/activity/del', function (req, res, next) {
     }, false)
 });
 
-/* remove modules. */
-router.all('/module/del', function (req, res, next) {
+/*Update activity*/
+router.all('/activity/update', function (req, res, next) {
     util.JSONChecker(res, req.body, (data) => {
-        modules.destroy({where: {mid: data.mid}})
-            .then((module) => {
-                if (module) {
-                    util.Jwr(res, true, module, "module deleted");
+        activities.findOne({where: {aid: data.aid}})
+            .then((activity) => {
+                if (activity) {
+                    delete data.utoken;
+                    //apply new updates
+                    activities.update(data, {where: {aid: data.aid}});
+                    util.Jwr(res, true, activity, "Activity records updated !");
                 } else {
-                    util.Jwr(res, false, module, "module to delete done !");
+                    util.Jwr(res, false, [], "Unable to update non-existing Activity");
                 }
             }).catch(err => {
-            util.Jwr(res, false, [], "Error deleting module");
+                console.log(err);
+            util.Jwr(res, false, [], "Error updating Activity");
         })
     }, false)
 });
+
 module.exports = router;
