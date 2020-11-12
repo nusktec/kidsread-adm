@@ -212,7 +212,6 @@ router.all('/activity/update', function (req, res, next) {
                     util.Jwr(res, false, [], "Unable to update non-existing Activity");
                 }
             }).catch(err => {
-                console.log(err);
             util.Jwr(res, false, [], "Error updating Activity");
         })
     }, false)
